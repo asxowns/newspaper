@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" as="style" crossorigin
+	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" th:href="@{/css/header.css}">
+
+<style>
+.loginForm-area{
+	width:100%;
+}
+table{
+	margin:100px auto;
+}
+input[type="text"]{
+	width:300px;
+	height:40px;
+	border-radius:5px;
+	border:1px solid #ccc;
+	padding-left:10px;
+	box-sizing:border-box;
+	margin-bottom:10px;
+}
+button{
+	width:300px;
+	height:40px;
+	border-radius:5px;
+	border:1px solid #aaa;
+	cursor:pointer;
+	margin-top:5px;
+}
+
+.small-title{
+	text-align:center;
+	margin-top:100px;
+}
+</style>
+</head>
+<body>
+	<div th:insert="~{header :: header}"></div>
+	
+	<h2 class="small-title">로그인</h2>
+	
+	<form action="login" method="post">
+		<table>
+			<div class="loginForm-area">
+			<tr>
+				<td><input type="text" name="username" placeholder="아이디"></td>
+			</tr>
+			<tr>
+				<td><input type="text" name="password" placeholder="비밀번호"></td>
+			</tr>
+			<tr>
+				<td><button type="submit">로그인</button></td>
+			</tr>
+			</div>
+		</table>
+	</form>
+	<div>[[${msg}]]</div>
+
+
+</body>
+</html>

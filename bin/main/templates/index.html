@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" as="style" crossorigin
+	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" th:href="@{/css/header.css}">
+<style>
+</style>
+</head>
+<body>
+	<div th:insert="~{header :: header}"></div>
+	
+	<div id="get_demo"></div>
+
+
+
+	<script>
+	function getApprovedArticles() {
+	    const xhttp = new XMLHttpRequest();
+	    xhttp.onload = function() {
+	        const data = JSON.parse(this.responseText);
+
+	        let output = "123";
+	        
+	        for(let i = 0; i < data.length; i++){
+	            output += '<div>';
+	            output += '<td>' + data[i].ano.title + '</td>';
+	            output += '<td>' + data[i].ano.content + '</td>';
+	            output += '<td>' + data[i].ano.writer.name + '</td>';
+	            output += '<td>' + data[i].ano.date + '</td>';
+	            output += '</div>';
+	        }
+
+	        document.getElementById("get_demo").innerHTML = output;
+	    }
+	    xhttp.open("GET", "/api/okayList");
+	    xhttp.send();
+	}
+
+	// HTML 페이지 로드 후 함수 호출
+	document.addEventListener('DOMContentLoaded', (event) => {
+	    getApprovedArticles();
+	});
+
+		function logout() {
+
+			const xhttp = new XMLHttpRequest();
+			xhttp.onload = function() {
+				const response = this.responseText;
+				if (response === "logout success") {
+					window.location.href = "/";
+				}
+			}
+			xhttp.open("POST", "/api/logout");
+			//xhttp.setRequestHeader("Content-type", "application/json");
+			xhttp.send();
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" as="style" crossorigin
+	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" th:href="@{/css/header.css}">
+<style>
+.regist-area {
+	width:100%;
+	margin: 100px auto;
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+}
+
+input[type="text"] {
+	width: 300px;
+	height: 40px;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	padding-left: 10px;
+	box-sizing: border-box;
+	margin-bottom: 10px;
+}
+
+button {
+	width: 300px;
+	height: 40px;
+	border-radius: 5px;
+	border: 1px solid #aaa;
+	cursor: pointer;
+	margin-top: 5px;
+}
+.small-title{
+	text-align:center;
+	margin-top:100px;
+}
+</style>
+</head>
+<body>
+	<div th:insert="~{header :: header}"></div>
+	
+	<h2 class="small-title">회원가입</h2>
+	<div class="regist-area">
+		<input type="text" name="username" placeholder="아이디">
+		<input type="text" name="password" placeholder="비밀번호">
+		<input type="text" name="name" placeholder="이름">
+		<button onclick="regist()">회원가입</button>
+	</div>
+
+	<script>
+		/* 등록하기 */
+		function regist() {
+
+			const username_ = document.querySelector("input[name='username']").value;
+			const password_ = document.querySelector("input[name='password']").value;
+			const name_ = document.querySelector("input[name='name']").value;
+
+			const user = {
+				username : username_,
+				password : password_,
+				name : name_
+			}
+
+			const jsonData = JSON.stringify(user);
+
+			const xhttp = new XMLHttpRequest();
+			xhttp.onload = function() {
+				const response = this.responseText;
+				if(response === "regist success"){
+					window.location.href = "/loginForm";
+				}
+
+			}
+			xhttp.open("POST", "/api/regist");
+			xhttp.setRequestHeader("Content-type", "application/json");
+			xhttp.send(jsonData);
+		}
+
+		function logout() {
+
+			const xhttp = new XMLHttpRequest();
+			xhttp.onload = function() {
+				const response = this.responseText;
+				if (response === "logout success") {
+					window.location.href = "/";
+				}
+			}
+			xhttp.open("POST", "/api/logout");
+			//xhttp.setRequestHeader("Content-type", "application/json");
+			xhttp.send();
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" as="style" crossorigin
+	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" th:href="@{/css/header.css}">
+<style>
+.listTable, .listTable tr, .listTable th, .listTable td {
+	border-collapse: collapse;
+	border: 1px solid #000;
+	padding: 10px;
+	text-align: center;
+}
+
+.listTable {
+	width: 70%;
+	margin: 100px auto;
+}
+
+.listTable tr:nth-child(1) {
+	background: #f5f5f5;
+}
+
+.listTable tr th:nth-child(1) {
+	width: 35px;
+}
+
+.listTable tr th:nth-child(2) {
+	width: 200px;
+}
+
+.listTable tr th:nth-child(4) {
+	width: 60px;
+}
+
+.listTable tr th:nth-child(5) {
+	width: 100px;
+}
+
+.listTable tr th:nth-child(6) {
+	width: 100px;
+}
+
+.listTable button {
+	width: 70%;
+}
+</style>
+</head>
+<body>
+
+	<div th:insert="~{header :: header}"></div>
+
+	<div id="get_demo"></div>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			getArticleList();
+		});
+
+		function getArticleList() {
+			const xhttp = new XMLHttpRequest();
+			xhttp.onload = function() {
+
+				const data = JSON.parse(this.responseText);
+
+				let output = '<table class="listTable"><tr><th>번호</th><th>제목</th><th>내용</th><th>작성자</th><th>작성날짜</th><th>승인요청</th></tr>';
+
+				for (let i = 0; i < data.length; i++) {
+					output += '<tr>';
+					output += '<td>' + data[i].ano + '</td>';
+					output += '<td>' + data[i].title + '</td>';
+					output += '<td>' + data[i].content + '</td>';
+					output += '<td>' + data[i].writer.name + '</td>';
+					output += '<td>' + data[i].date + '</td>';
+					output += '<td><button id="okay_btn_'+ data[i].ano +'" onclick="okay('+ data[i].ano + ')"';
+					if(data[i].approved){
+						output += 'disabled>승인됨</button></td>';
+					}else{
+						output += '>승인</button></td>';
+					}
+					
+					output += '</tr>';
+				}
+				output += '</table>';
+
+				document.getElementById("get_demo").innerHTML = output;
+			}
+			xhttp.open("GET", "/api/articleList");
+			//xhttp.setRequestHeader("Content-type", "application/json");
+			xhttp.send();
+		}
+
+		function okay(ano) {
+
+			const buttonId = "okay_btn_" + ano;
+			const button = document.getElementById(buttonId);
+			if (button) {
+				button.innerHTML = "승인됨";
+				button.disabled = true;
+			}
+			const jsonData = JSON.stringify({
+				ano : ano
+			});
+
+			const xhttp = new XMLHttpRequest();
+			xhttp.onload = function() {
+				document.getElementById("post_demo").innerHTML = this.responseText;
+			}
+			xhttp.open("POST", "/api/okay");
+			xhttp.setRequestHeader("Content-type", "application/json");
+			xhttp.send(jsonData);
+		}
+
+		function logout() {
+
+			const xhttp = new XMLHttpRequest();
+			xhttp.onload = function() {
+				const response = this.responseText;
+				if (response === "logout success") {
+					window.location.href = "/";
+				}
+			}
+			xhttp.open("POST", "/api/logout");
+			//xhttp.setRequestHeader("Content-type", "application/json");
+			xhttp.send();
+		}
+	</script>
+</body>
+</html>

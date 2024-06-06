@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" as="style" crossorigin
+	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" th:href="@{/css/header.css}">
+<style>
+	
+</style>
+</head>
+<body>
+	<header>
+		<div class="head-left">
+			<img th:src="@{img/asd.jpg}" class="img">
+		</div>
+		<div class="head-mid">
+			<h1><a href="/">더파이팅일보</a></h1>
+		</div>
+		<div class="head-right">
+			<ul>
+				<li th:if="${session.username == null}"><a href="loginForm">로그인</a></li>
+				<li th:if="${session.username == null}"><a href="registForm">회원가입</a></li>
+				<li th:if="${session.username != null and session.role == 'reporter'}"><a href="myPage">[[${session.name}]] 기자</a></li>
+				<li th:if="${session.username != null and session.role == 'editor'}"><a href="editorPage">[[${session.name}]] 편집장</a></li>
+				<li th:if="${session.username != null}"><button onclick="logout()">로그아웃</button></li>
+			</ul>
+		</div>
+	</header>
+	
+	<script>
+	function logout() {
+
+		const xhttp = new XMLHttpRequest();
+		xhttp.onload = function() {
+			const response = this.responseText;
+			if(response === "logout success"){
+				window.location.href = "/";
+			}
+		}
+		xhttp.open("POST", "/api/logout");
+		//xhttp.setRequestHeader("Content-type", "application/json");
+		xhttp.send();
+	}
+	</script>
+	
+</body>
+</html>
