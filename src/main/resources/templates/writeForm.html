@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" as="style" crossorigin
+	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" th:href="@{/css/header.css}">
+<style>
+.writeForm-area {
+	width: 100%;
+}
+
+table {
+	margin: 100px auto;
+}
+
+.writeForm-area input[type="text"] {
+	width: 500px;
+	height: 40px;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	padding-left: 10px;
+	box-sizing: border-box;
+	margin-bottom: 30px;
+}
+
+.writeForm-area button {
+	width: 500px;
+	height: 40px;
+	border-radius: 5px;
+	border: 1px solid #aaa;
+	cursor: pointer;
+	margin-top: 5px;
+}
+
+.writeForm-area textarea {
+	width: 500px;
+	height: 400px;
+	padding: 10px;
+	box-sizing: border-box;
+}
+
+
+</style>
+</head>
+<body>
+	<div th:insert="~{header :: header}"></div>
+
+	<form id="writeForm">
+		<div class="writeForm-area">
+			<table>
+				<tr>
+					<td><input type="text" name="title" placeholder="기사 제목"></td>
+				</tr>
+				<tr>
+					<th>기사 내용</th>
+				</tr>
+				<tr>
+					<td><textarea name="content" id="content"></textarea></td>
+				</tr>
+				<tr>
+					<td><input type="hidden" name="writer"
+						th:value="${session.username}"></td>
+				</tr>
+				<tr>
+					<td><button type="button" id="submitBtn">작성하기</button></td>
+				</tr>
+			</table>
+		</div>
+	</form>
+	
+	<script>
+		document.getElementById("submitBtn").addEventListener("click",
+				function(event) {
+					event.preventDefault(); // 기본 제출 동작 막기
+					write();
+				});
+
+		function write() {
+
+			//const title_ = document.querySelector("input[name='title']").value;
+			//const content_ = document.querySelector("#content").value;
+			//const writer_ = document.querySelector("input[name='writer']").value;
+
+			//const article = {
+			//title : title_,
+			//content : content_,
+			//writer : writer_
+			//}
+
+			//const jsonData = JSON.stringify(article);
+
+			const form = document.getElementById("writeForm");
+			const formData = new FormData(form);
+
+			const xhttp = new XMLHttpRequest();
+			xhttp.onload = function() {
+				const response = this.responseText;
+				if (response === "write success") {
+					window.location.href = "myPage";
+				}
+			}
+			xhttp.open("POST", "/api/write");
+			//xhttp.setRequestHeader("Content-type", "application/json");
+			xhttp.send(formData);
+		}
+
+		function logout() {
+
+			const xhttp = new XMLHttpRequest();
+			xhttp.onload = function() {
+				const response = this.responseText;
+				if (response === "logout success") {
+					window.location.href = "/";
+				}
+			}
+			xhttp.open("POST", "/api/logout");
+			//xhttp.setRequestHeader("Content-type", "application/json");
+			xhttp.send();
+		}
+		
+		
+	</script>
+</body>
+</html>
